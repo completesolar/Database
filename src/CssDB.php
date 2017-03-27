@@ -9,18 +9,19 @@ class CssDB
     public $errors;
     private $isError;
 
-    public function __construct($hostname, $username, $password, $dbname) {
+    public function __construct($hostname, $username, $password, $dbname, $db=null) {
         $this->result = null;
         $this->errors = array();
         $this->isError = false;
-
-        $this->db = new \mysqli($hostname, $username, $password, $dbname);
-        /* check connection */
-        if ($this->db->connect_errno) {
-            printf("Connect failed: %s\n", $this->db->connect_error);
-            exit();
+        if($db == null){
+            $db = new \mysqli($hostname, $username, $password, $dbname);
+            /* check connection */
+            if ($db->connect_errno) {
+                printf("Connect failed: %s\n", $db->connect_error);
+                exit();
+            }
         }
-
+        $this->db = $db;
         $this->inTransaction = false;
     }
 
